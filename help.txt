@@ -1,0 +1,22 @@
+## Next crud swr and typescript
+
+### =========references===========
+-tutorials
+
+
+
+### features/actions
+1.  CRUD operations
+2.  fake server as json server
+
+### technologies used
+1.  next js
+2.  typescript
+3.  swr query
+
+### completed tasks
+1.  CRUD operations
+
+### pending tasks
+1.  deployment somewhere
+2.  use real database 
