@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "name": "abul ",
+      "name": "abul",
       "email": "abul@gmail.com",
       "age": "35",
       "id": 1
@@ -17,18 +17,6 @@
       "name": "cabul",
       "email": "cabul@gmail.com",
       "age": "63"
-    },
-    {
-      "id": "65bd5aa2-98e5-4585-819d-4e2cb88a0360",
-      "name": "dabul",
-      "email": "dabul@gamil.com",
-      "age": "26"
-    },
-    {
-      "id": "8f0366a8-ca44-4f33-a765-833d4e35a11c",
-      "name": "kabul",
-      "email": "kabul@gamil.com",
-      "age": "36"
     }
   ]
 }

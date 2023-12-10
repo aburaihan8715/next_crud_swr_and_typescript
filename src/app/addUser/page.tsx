@@ -1,26 +1,12 @@
 "use client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
 
-// 1. create fetcher
+// 03. create fetcher
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-// 2. create function for posting data
-export const postData = async (data: any) => {
-  const response = await fetch("http://localhost:4000/users", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) throw new Error("Error posting data");
-
-  return response.json();
-};
 
 const AddUser = () => {
   const [name, setName] = useState("");
@@ -28,7 +14,7 @@ const AddUser = () => {
   const [age, setAge] = useState("");
   const router = useRouter();
 
-  // 3. call useSWR
+  // 04.  call useSWR
   const { mutate } = useSWR("http://localhost:4000/users", fetcher);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,6 +22,7 @@ const AddUser = () => {
 
     if (!name || !email || !age) return alert("Name, email and age are required!");
 
+    // 01. received data from the user
     const newUser = {
       id: uuidv4(),
       name,
@@ -43,10 +30,10 @@ const AddUser = () => {
       age,
     };
 
+    // 02. send data to the database or server
     try {
-      // Post data
-      await postData(newUser);
-      // Trigger revalidation
+      const res = await axios.post("http://localhost:4000/users", newUser);
+      if (res.statusText !== "Created") throw new Error("Error posting data");
       mutate();
       router.push("/");
     } catch (error) {

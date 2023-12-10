@@ -1,13 +1,12 @@
 "use client";
+import axios from "axios";
 import Link from "next/link";
 import useSWR from "swr";
-
-// const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Home() {
-  const { data, error, isLoading } = useSWR("http://localhost:4000/users", fetcher);
+  const { data, error, isLoading, mutate: userMutate } = useSWR("http://localhost:4000/users", fetcher);
 
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
@@ -23,12 +22,12 @@ export default function Home() {
               <p className="capitalize">{item.age}years</p>
             </div>
             <div className="flex gap-2 items-start">
-              <UserDeleteBtn />
-              <Link href={`/updateUser/123`}>
+              <UserDeleteBtn id={item.id} userMutate={userMutate} />
+              <Link href={`/updateUser/${item.id}`}>
                 <button className="c-btn bg-green-600">update</button>
               </Link>
 
-              <Link href={`/userDetails/123`}>
+              <Link href={`/userDetails/${item.id}`}>
                 <button className="c-btn bg-blue-600">details</button>
               </Link>
             </div>
@@ -40,6 +39,27 @@ export default function Home() {
 }
 
 // user delete button component
-function UserDeleteBtn() {
-  return <button className="c-btn bg-red-600">delete</button>;
+type UserDeleteBtnProps = {
+  id: string;
+  userMutate: () => void;
+};
+function UserDeleteBtn({ id, userMutate }: UserDeleteBtnProps) {
+  const deleteHandler = async () => {
+    const agree = confirm("Are you sure");
+    if (agree) {
+      try {
+        const res = await axios.delete(`http://localhost:4000/users/${id}`);
+        if (res.statusText !== "OK") throw new Error("No user with this id to delete!");
+        alert("User deleted");
+        userMutate();
+      } catch (error) {
+        console.error("Failed to delete user", error);
+      }
+    }
+  };
+  return (
+    <button onClick={deleteHandler} className="c-btn bg-red-600">
+      delete
+    </button>
+  );
 }
